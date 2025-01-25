@@ -1,0 +1,42 @@
+.terminal {
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terminal-line {
+  line-height: 1.5;
+  padding: 2px 0;
+}
+
+.terminal-cursor {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Support pour les liens */
+.terminal a {
+  color: #61afef;
+  text-decoration: underline;
+}
+
+.terminal a:hover {
+  color: #84c3f7;
+}
+
+/* Mise en forme du texte */
+.terminal pre {
+  margin: 8px 0;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.terminal code {
+  font-family: 'Fira Code', monospace;
+}
