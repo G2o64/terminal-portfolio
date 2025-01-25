@@ -1,9 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './terminal.css';
 
+interface HistoryItem {
+  content: string;
+  type: 'command' | 'output';
+}
+
 const TerminalPortfolio = () => {
   const [input, setInput] = useState('');
-  const [history, setHistory] = useState<Array<{text: string, type: 'command' | 'output'}>>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
 
@@ -30,16 +35,18 @@ const TerminalPortfolio = () => {
 
   const addToHistory = (lines: string | string[], type: 'command' | 'output') => {
     const newLines = Array.isArray(lines) ? lines : [lines];
-    setHistory(prev => [...prev, ...newLines.map(text => ({ text, type }))]);
+    setHistory(prev => [...prev, ...newLines.map(content => ({ content, type }))]);
   };
 
   const handleCommand = (cmd: string) => {
     const trimmedCmd = cmd.trim().toLowerCase();
-    addToHistory(cmd, 'command');
+    addToHistory(`$ ${cmd}`, 'command');
+    
+    if (trimmedCmd === '') return;
     
     if (commands[trimmedCmd]) {
       commands[trimmedCmd]();
-    } else if (trimmedCmd) {
+    } else {
       addToHistory(`Commande non trouvée: ${cmd}`, 'output');
     }
   };
@@ -78,7 +85,7 @@ const TerminalPortfolio = () => {
         <div className="terminal-body bg-black/90 p-4 font-mono text-sm">
           {history.map((item, i) => (
             <div key={i} className={item.type === 'command' ? 'command-text' : 'output-text'}>
-              {item.type === 'command' ? '$ ' : ''}{item.text}
+              {item.content}
             </div>
           ))}
           
