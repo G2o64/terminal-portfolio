@@ -9,6 +9,7 @@ interface HistoryItem {
 const TerminalPortfolio = () => {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [theme, setTheme] = useState<'default' | 'dofus'>('default');
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
 
@@ -18,12 +19,24 @@ const TerminalPortfolio = () => {
         'Commandes disponibles :',
         'help     - Affiche cette aide',
         'clear    - Nettoie le terminal',
+        'theme    - Change le thème (default/dofus)',
         'about    - À propos de moi',
         'projects - Mes projets',
         'contact  - Me contacter'
       ], 'output');
     },
     clear: () => setHistory([]),
+    theme: (args?: string) => {
+      if (args === 'dofus') {
+        setTheme('dofus');
+        addToHistory('Thème DOFUS activé!', 'output');
+      } else if (args === 'default') {
+        setTheme('default');
+        addToHistory('Thème par défaut activé!', 'output');
+      } else {
+        addToHistory('Usage: theme [default|dofus]', 'output');
+      }
+    },
     about: () => {
       addToHistory([
         '👋 Je suis un développeur passionné',
@@ -40,12 +53,13 @@ const TerminalPortfolio = () => {
 
   const handleCommand = (cmd: string) => {
     const trimmedCmd = cmd.trim().toLowerCase();
+    const [command, ...args] = trimmedCmd.split(' ');
     addToHistory(`$ ${cmd}`, 'command');
     
     if (trimmedCmd === '') return;
     
-    if (commands[trimmedCmd]) {
-      commands[trimmedCmd]();
+    if (commands[command]) {
+      commands[command](args.join(' '));
     } else {
       addToHistory(`Commande non trouvée: ${cmd}`, 'output');
     }
@@ -72,7 +86,10 @@ const TerminalPortfolio = () => {
 
   return (
     <div className="terminal-container min-h-screen bg-gray-900 p-4">
-      <div ref={terminalRef} className="terminal max-w-3xl mx-auto rounded-lg overflow-hidden shadow-lg">
+      <div 
+        ref={terminalRef} 
+        className={`terminal max-w-3xl mx-auto rounded-lg overflow-hidden shadow-lg ${theme === 'dofus' ? 'theme-dofus' : ''}`}
+      >
         <div className="terminal-header flex items-center gap-2 bg-gray-800 px-4 py-2">
           <div className="flex gap-2">
             <div className="w-3 h-3 rounded-full bg-red-500"></div>
