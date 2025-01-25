@@ -1,29 +1,43 @@
 .terminal {
   height: 80vh;
-  background-color: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(10px);
+  background-color: #141414;
   font-family: 'Fira Code', monospace;
 }
 
-.terminal-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.terminal-body {
-  height: calc(80vh - 40px);
-  overflow-y: auto;
-}
-
 .command-text {
-  color: #FF6B6B;  /* Rouge pour les commandes */
+  color: #FF6B6B;
 }
 
 .output-text {
-  color: #4ade80;  /* Vert pour les sorties */
+  color: #4ade80;
 }
 
 .prompt-text {
-  color: #9D86E9;  /* Violet pour le prompt */
+  color: #9D86E9;
+}
+
+/* Theme DOFUS */
+.theme-dofus {
+  background-color: #1a0f0f !important;
+  border: 2px solid #8b4513;
+  box-shadow: 0 0 15px rgba(139, 69, 19, 0.5);
+}
+
+.theme-dofus .terminal-header {
+  background-color: #2d1810 !important;
+  border-bottom: 2px solid #8b4513;
+}
+
+.theme-dofus .command-text {
+  color: #ffa500 !important;
+}
+
+.theme-dofus .output-text {
+  color: #98fb98 !important;
+}
+
+.theme-dofus .prompt-text {
+  color: #daa520 !important;
 }
 
 .terminal-body::-webkit-scrollbar {
@@ -39,10 +53,6 @@
   border-radius: 4px;
 }
 
-input {
-  caret-color: #4ade80;
-}
-
 @keyframes blink {
   50% { opacity: 0; }
 }
@@ -51,5 +61,8 @@ input {
   content: '▋';
   animation: blink 1s step-start infinite;
   color: #4ade80;
-  margin-left: 2px;
+}
+
+.theme-dofus .cursor::after {
+  color: #ffd700;
 }
