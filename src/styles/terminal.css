@@ -1,42 +1,36 @@
 .terminal {
-  background-color: rgba(0, 0, 0, 0.8);
+  height: 80vh;
+  background-color: #141414;
   backdrop-filter: blur(10px);
-  border-radius: 8px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.terminal-line {
-  line-height: 1.5;
-  padding: 2px 0;
-}
-
-.terminal-cursor {
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-/* Support pour les liens */
-.terminal a {
-  color: #61afef;
-  text-decoration: underline;
-}
-
-.terminal a:hover {
-  color: #84c3f7;
-}
-
-/* Mise en forme du texte */
-.terminal pre {
-  margin: 8px 0;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-
-.terminal code {
   font-family: 'Fira Code', monospace;
+  border: 2px solid #deb887;
+}
+
+/* Theme DOFUS */
+.theme-dofus {
+  background-color: #1a0f0f;
+  color: #ffd700;
+  border: 2px solid #8b4513;
+  box-shadow: 0 0 15px rgba(139, 69, 19, 0.5);
+}
+
+.theme-dofus .terminal-header {
+  background-color: #2d1810;
+  border-bottom: 2px solid #8b4513;
+}
+
+.theme-dofus .command-text {
+  color: #ffa500;  /* Orange pour les commandes */
+}
+
+.theme-dofus .output-text {
+  color: #98fb98;  /* Vert clair pour les sorties */
+}
+
+.theme-dofus .prompt-text {
+  color: #daa520;  /* Doré pour le prompt */
+}
+
+.theme-dofus .cursor {
+  background-color: #ffd700;
 }
