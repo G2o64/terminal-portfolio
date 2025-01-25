@@ -3,7 +3,7 @@ import './terminal.css';
 
 const TerminalPortfolio = () => {
   const [input, setInput] = useState('');
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<Array<{text: string, type: 'command' | 'output'}>>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
 
@@ -16,7 +16,7 @@ const TerminalPortfolio = () => {
         'about    - À propos de moi',
         'projects - Mes projets',
         'contact  - Me contacter'
-      ]);
+      ], 'output');
     },
     clear: () => setHistory([]),
     about: () => {
@@ -24,22 +24,23 @@ const TerminalPortfolio = () => {
         '👋 Je suis un développeur passionné',
         '🚀 Spécialisé en React, TypeScript et Node.js',
         '💼 Actuellement en recherche de nouvelles opportunités'
-      ]);
+      ], 'output');
     }
   };
 
-  const addToHistory = (lines: string | string[]) => {
-    setHistory(prev => [...prev, ...(Array.isArray(lines) ? lines : [lines])]);
+  const addToHistory = (lines: string | string[], type: 'command' | 'output') => {
+    const newLines = Array.isArray(lines) ? lines : [lines];
+    setHistory(prev => [...prev, ...newLines.map(text => ({ text, type }))]);
   };
 
   const handleCommand = (cmd: string) => {
     const trimmedCmd = cmd.trim().toLowerCase();
-    addToHistory(`$ ${cmd}`);
+    addToHistory(cmd, 'command');
     
     if (commands[trimmedCmd]) {
       commands[trimmedCmd]();
     } else if (trimmedCmd) {
-      addToHistory(`Commande non trouvée: ${cmd}`);
+      addToHistory(`Commande non trouvée: ${cmd}`, 'output');
     }
   };
 
@@ -51,8 +52,8 @@ const TerminalPortfolio = () => {
   };
 
   useEffect(() => {
-    addToHistory('Bienvenue dans mon portfolio!');
-    addToHistory('Tapez "help" pour voir la liste des commandes disponibles');
+    addToHistory('Bienvenue dans mon portfolio!', 'output');
+    addToHistory('Tapez "help" pour voir la liste des commandes disponibles', 'output');
     inputRef.current?.focus();
   }, []);
 
@@ -75,21 +76,24 @@ const TerminalPortfolio = () => {
         </div>
         
         <div className="terminal-body bg-black/90 p-4 font-mono text-sm">
-          {history.map((line, i) => (
-            <div key={i} className="text-green-400 mb-1">{line}</div>
+          {history.map((item, i) => (
+            <div key={i} className={item.type === 'command' ? 'command-text' : 'output-text'}>
+              {item.type === 'command' ? '$ ' : ''}{item.text}
+            </div>
           ))}
           
           <div className="flex items-center">
-            <span className="text-green-400">$ </span>
+            <span className="prompt-text">$ </span>
             <input
               ref={inputRef}
               type="text"
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="flex-1 bg-transparent text-green-400 outline-none ml-2"
+              className="flex-1 bg-transparent command-text outline-none ml-2"
               autoFocus
             />
+            <span className="cursor"></span>
           </div>
         </div>
       </div>
