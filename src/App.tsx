@@ -1,12 +1,5 @@
-import React from 'react';
 import TerminalPortfolio from './components/Terminal/TerminalPortfolio';
 
-const App = () => {
-  return (
-    <div className="min-h-screen bg-gray-900">
-      <TerminalPortfolio />
-    </div>
-  );
-};
+const App = () => <TerminalPortfolio />;
 
 export default App;
