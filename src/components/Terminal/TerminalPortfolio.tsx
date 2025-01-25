@@ -1,105 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './terminal.css';
-
-interface HistoryItem {
-  content: string;
-  type: 'command' | 'output';
-}
-
-const TerminalPortfolio = () => {
-  const [input, setInput] = useState('');
-  const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [theme, setTheme] = useState<'default' | 'dofus'>('default');
-  const inputRef = useRef<HTMLInputElement>(null);
-  const terminalRef = useRef<HTMLDivElement>(null);
-
-  const commands = {
-    help: () => {
-      addToHistory([
-        'Commandes disponibles :',
-        'help     - Affiche cette aide',
-        'clear    - Nettoie le terminal',
-        'theme    - Change le thème (default/dofus)',
-        'about    - À propos de moi',
-        'projects - Mes projets',
-        'contact  - Me contacter'
-      ], 'output');
-    },
-    clear: () => setHistory([]),
-    theme: (args?: string) => {
-      if (args === 'dofus') {
-        setTheme('dofus');
-        addToHistory('Thème DOFUS activé!', 'output');
-      } else if (args === 'default') {
-        setTheme('default');
-        addToHistory('Thème par défaut activé!', 'output');
-      } else {
-        addToHistory('Usage: theme [default|dofus]', 'output');
-      }
-    },
-    about: () => {
-      addToHistory([
-        '👋 Je suis un développeur passionné',
-        '🚀 Spécialisé en React, TypeScript et Node.js',
-        '💼 Actuellement en recherche de nouvelles opportunités'
-      ], 'output');
-    }
-  };
-
-  const addToHistory = (lines: string | string[], type: 'command' | 'output') => {
-    const newLines = Array.isArray(lines) ? lines : [lines];
-    setHistory(prev => [...prev, ...newLines.map(content => ({ content, type }))]);
-  };
-
-  const handleCommand = (cmd: string) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
-    const [command, ...args] = trimmedCmd.split(' ');
-    addToHistory(`$ ${cmd}`, 'command');
-    
-    if (trimmedCmd === '') return;
-    
-    if (commands[command]) {
-      commands[command](args.join(' '));
-    } else {
-      addToHistory(`Commande non trouvée: ${cmd}`, 'output');
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleCommand(input);
-      setInput('');
-    }
-  };
-
-  useEffect(() => {
-    addToHistory('Bienvenue dans mon portfolio!', 'output');
-    addToHistory('Tapez "help" pour voir la liste des commandes disponibles', 'output');
-    inputRef.current?.focus();
-  }, []);
-
-  useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
-  }, [history]);
-
-  return (
-    <div className="terminal-container min-h-screen bg-gray-900 p-4">
-      <div 
-        ref={terminalRef} 
-        className={`terminal max-w-3xl mx-auto rounded-lg overflow-hidden shadow-lg ${theme === 'dofus' ? 'theme-dofus' : ''}`}
-      >
-        <div className="terminal-header flex items-center gap-2 bg-gray-800 px-4 py-2">
-          <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          </div>
-          <div className="flex-1 text-center text-gray-400 text-sm">guest@portfolio</div>
-        </div>
-        
-        <div className="terminal-body bg-black/90 p-4 font-mono text-sm">
+        <div 
+          className={`terminal-body p-4 font-mono text-sm ${
+            theme === 'dofus' ? 'bg-[#1a0f0f]' : 'bg-black/90'
+          }`}
+        >
           {history.map((item, i) => (
             <div key={i} className={item.type === 'command' ? 'command-text' : 'output-text'}>
               {item.content}
@@ -117,14 +20,9 @@ const TerminalPortfolio = () => {
                 onKeyDown={handleKeyDown}
                 className="w-full bg-transparent command-text outline-none ml-2"
                 autoFocus
+                spellCheck="false"
               />
               <span className="cursor absolute left-[calc(100%+8px)]"></span>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
-
-export default TerminalPortfolio;
